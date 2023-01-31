@@ -1,21 +1,22 @@
 <template>
   <div class="main">
     <h2>main</h2>
+    <el-button @click="loginClick">退出登录</el-button>
   </div>
 </template>
 
 <script setup lang="ts">
-  import useHomeStore from '@/stores/module/home'
-  const useHome = useHomeStore()
-  console.log(useHome.num);
-  console.log(useHome.dbNum);
-  console.log(useHome.changeNum(9));
-  useHome.fetchHomeData()
+import router from '@/router'
+import { localCache } from '@/utils/cache'
 
+const loginClick = () => {
+  console.log('a')
+  router.push('/login')
+  localCache.removeStorage('token')
+}
 </script>
 
 <style lang="less" scoped>
- .main {
-
- }
+.main {
+}
 </style>
