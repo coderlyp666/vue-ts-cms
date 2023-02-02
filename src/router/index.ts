@@ -18,16 +18,31 @@ const router = createRouter({
     },
     {
       path: '/main',
-      component: () => import('../views/main/Main.vue')
+      component: () => import('../views/main/Main.vue'),
+      children: [
+        {
+          path: '/main',
+          redirect: '/main/analysis/overview'
+        },
+        {
+          path: '/main/analysis/overview',
+          component: () =>
+            import('../views/main/analysis/overview/overview.vue')
+        },
+        {
+          path: '/main/analysis/dashboard',
+          component: () =>
+            import('../views/main/analysis/dashboard/dashboard.vue')
+        }
+      ]
     }
   ]
 })
 
 // 导航守卫
 router.beforeEach((to) => {
-  console.log(to)
   const token = localCache.getStorage('token')
-  if (to.path === '/main' && !token) {
+  if (to.path.startsWith('/main') && !token) {
     return '/login'
   }
 })

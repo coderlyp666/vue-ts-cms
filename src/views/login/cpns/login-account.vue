@@ -69,7 +69,6 @@ const accountAndPassword: {
 const useLogin = useLoginStore()
 const LoginAccount = (iSActivePwd: boolean) => {
   formRef.value?.validate((valid) => {
-    console.log(valid)
     if (valid) {
       const name = accountAndPassword.name
       const password = accountAndPassword.password
