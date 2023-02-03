@@ -1,7 +1,7 @@
 <template>
   <div class="aside">
     <el-menu
-      default-active="39"
+      :default-active="defaultPage"
       class="el-menu-vertical-demo"
       text-color="#b7bdc3"
       active-text-color="#fff"
@@ -38,9 +38,10 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
-import { useRouter } from 'vue-router'
+import { defineProps, ref, computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { localCache } from '@/utils/cache'
+import { mapPathToMenu } from '@/utils/map-menus'
 const props = defineProps({
   isFold: {
     type: Boolean,
@@ -55,10 +56,16 @@ const userMenus = localCache.getStorage('userMenus') ?? []
 // 页面跳转
 const router = useRouter()
 const routerClick = (path: string) => {
-  console.log(path)
-
   router.push(path)
 }
+
+// 默认页面的显示
+const route = useRoute()
+console.log(route.path)
+const defaultPage = computed(() => {
+  const path = mapPathToMenu(route.path, userMenus)
+  return path.id + ''
+})
 </script>
 
 <style lang="less" scoped>

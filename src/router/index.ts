@@ -1,4 +1,5 @@
 import { localCache } from '@/utils/cache'
+import { firstMenu } from '@/utils/map-menus'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 const router = createRouter({
@@ -18,23 +19,24 @@ const router = createRouter({
     },
     {
       path: '/main',
-      component: () => import('../views/main/Main.vue'),
-      children: [
-        {
-          path: '/main',
-          redirect: '/main/analysis/overview'
-        },
-        {
-          path: '/main/analysis/overview',
-          component: () =>
-            import('../views/main/analysis/overview/overview.vue')
-        },
-        {
-          path: '/main/analysis/dashboard',
-          component: () =>
-            import('../views/main/analysis/dashboard/dashboard.vue')
-        }
-      ]
+      name: 'main',
+      component: () => import('../views/main/Main.vue')
+      // children: [
+      //   {
+      //     path: '/main',
+      //     redirect: '/main/analysis/overview'
+      //   },
+      //   {
+      //     path: '/main/analysis/overview',
+      //     component: () =>
+      //       import('../views/main/analysis/overview/overview.vue')
+      //   },
+      //   {
+      //     path: '/main/analysis/dashboard',
+      //     component: () =>
+      //       import('../views/main/analysis/dashboard/dashboard.vue')
+      //   }
+      // ]
     }
   ]
 })
@@ -45,5 +47,7 @@ router.beforeEach((to) => {
   if (to.path.startsWith('/main') && !token) {
     return '/login'
   }
+
+  if (to.path === '/main') return firstMenu.url
 })
 export default router

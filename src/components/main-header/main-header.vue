@@ -4,7 +4,15 @@
       <el-icon size="28px">
         <component :is="isFold ? 'Expand' : 'Fold'" @click="unfoldClick" />
       </el-icon>
-      <div class="breadcrumbs">面包屑</div>
+      <div class="breadcrumbs">
+        <el-breadcrumb separator-icon="ArrowRight">
+          <template v-for="item in breadcrumbs" :key="item.name">
+            <el-breadcrumb-item
+              ><a>{{ item.name }}</a></el-breadcrumb-item
+            >
+          </template>
+        </el-breadcrumb>
+      </div>
     </div>
     <div class="right">
       <el-dropdown>
@@ -26,11 +34,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineEmits } from 'vue'
+import { ref, defineEmits, computed } from 'vue'
 import { ElMessage } from 'element-plus'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { localCache } from '@/utils/cache/index'
-
+import { mapPathToBreadcrumbs } from '@/utils/map-menus'
 const router = useRouter()
 const isFold = ref<boolean>(false)
 // 获取用户名
@@ -45,6 +53,11 @@ const exitClick = () => {
   })
 }
 
+// 面包屑
+const route = useRoute()
+const breadcrumbs = computed(() => {
+  return mapPathToBreadcrumbs(route.path, localCache.getStorage('userMenus'))
+})
 const emit = defineEmits(['foldChange'])
 const unfoldClick = () => {
   console.log('s')
@@ -62,6 +75,11 @@ const unfoldClick = () => {
 
   .left {
     display: flex;
+    align-items: center;
+
+    .breadcrumbs {
+      margin-left: 15px;
+    }
   }
   .right {
     cursor: pointer;

@@ -93,6 +93,8 @@ const LoginAccount = (iSActivePwd: boolean) => {
           }
         })
         .catch((err) => {
+          console.log(err)
+
           ElMessage({
             type: 'error',
             message: '登录失败! 账号或密码错误~'
